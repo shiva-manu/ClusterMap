@@ -33,7 +33,7 @@ class LocationRequest(BaseModel):
 
 def search_places(landmark: str, location: str) -> List[Dict]:
     place = f"{landmark} in {location}"
-    api_key = "IInXYC3x8Kqv3nRjk3YBMMl4MCykdsD6nAB8CUuG"  # Replace with your actual API key
+    api_key = ""  # Replace with your actual API key
     url = f"https://api.olamaps.io/places/v1/textsearch?input={place}&api_key={api_key}"
     headers = {
         "X-Request-Id": str(uuid.uuid4())
