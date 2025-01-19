@@ -39,27 +39,28 @@ const LandMark = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/clusters', {
+      const response = await fetch('https://server-shiva-manus-projects.vercel.app/api/v1/clusters', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           landmarks: validLandmarks,
-          location,
-          proximity_threshold: parseFloat(proximityThreshold)
+          location: location,
+          proximity_threshold: proximityThreshold
         })
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('Network response was not ok');
       }
 
       const data = await response.json();
+      // Handle the response data
       console.log(data);
       setClusters(data);
-    } catch (err) {
-      setError(err.message || 'An error occurred');
+    } catch (error) {
+      setError('An error occurred while fetching data');
     } finally {
       setLoading(false);
     }

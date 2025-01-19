@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional
@@ -7,21 +8,20 @@ from math import radians, sin, cos, sqrt, atan2
 from itertools import combinations
 import uuid
 import json
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 app = FastAPI(
     title="Landmark Cluster API",
     description="API for finding clusters of landmarks in a given location",
     version="1.0.0"
 )
-origins = [
-    "http://localhost:5173",
-]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # Allow all origins
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["*"],
     allow_headers=["*"],
     max_age=86400,  # Cache preflight requests for 24 hours
 )
@@ -109,8 +109,9 @@ def calculate_midpoint(places: List[Dict]) -> tuple:
 def generate_cluster_id(index: int) -> str:
     return index+1
 
+# Ensure your endpoint handles authentication if required
 @app.post("/api/v1/clusters")
-async def find_clusters(request: LocationRequest):
+async def find_clusters(request: LocationRequest):  # Remove token dependency
     """
     Find clusters of landmarks within a specified proximity threshold in a given location.
     
